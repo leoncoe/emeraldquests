@@ -1,0 +1,15 @@
+Flow playground of previous quest questions https://play.onflow.org/be3b82ec-ddfa-4add-9536-80d76315d2ca
+
+Explain what the force unwrap operator ! does, with an example different from the one I showed you (you can just change the type).
+The force unwrap operator basically says, earlier, we were okay if it was the Type specified, OR nil, but now, we are only okay with it being the type specified.
+
+Using this picture below, explain...
+
+What the error message means
+The computer expected just String, but got String? (which includes nil)
+
+Why we're getting this error
+We need to force unwrap to print the string because we don't want nil
+
+How to fix it
+You must append an ! to the end of thing[0x03]
