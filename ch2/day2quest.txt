@@ -1,0 +1,11 @@
+Explain why we wouldn't call changeGreeting in a script.
+We utilized let instead of var, which means that we were not allowed to modify changeGreeting until we changed it to a variable.
+ 
+What does the AuthAccount mean in the prepare phase of the transaction?
+AuthAccount is the signers or authorizers account.
+
+What is the difference between the prepare phase and the execute phase in the transaction?
+
+The prepare phase is about accessing info only in YOUR account. The execute phase can call functions to change state on the blockchain.
+
+Playground link to completed quest: https://play.onflow.org/3b90eaf4-03c7-45c2-96db-3dc80bf638c4?type=script&id=109ec2dc-fef3-4f98-9494-c9f5339bdad5&storage=none
