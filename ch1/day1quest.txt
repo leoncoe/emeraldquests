@@ -1,0 +1,11 @@
+1. Explain what the Blockchain is in your own words. You can read this to help you, but you don't have to: https://www.investopedia.com/terms/b/blockchain.asp
+
+A blockchain is a decentralized and open database that utilizes smart contracts to allow people to modify the state of the blockchain.
+
+2. Explain what a Smart Contract is. You can read this to help you, but you don't have to: https://www.ibm.com/topics/smart-contracts
+
+Smart contracts are composed of functions with parameters that allow users to send transactions that modify the state of the blockchain.
+
+3. Explain the difference between a script and a transaction.
+
+Scripts are read only and do not change the state of the blockchain. They are free. Transactions are functions that users must pay for so they can change the state of the blockchain. 
