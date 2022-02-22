@@ -1,0 +1,51 @@
+https://play.onflow.org/c5e2e516-bdd6-4018-87ef-16d1a6b29454?type=script&id=5ff30ef1-da57-48ee-8222-bb26eee9a746&storage=none
+
+pub contract LeonsContract {
+
+    pub var bookshelfDictionary: @{String: Bookshelf}
+
+    pub resource Bookshelf {
+        pub let genre: String
+        init(_genre: String) {
+            self.genre = _genre
+        }
+    }
+
+    pub fun addToBookshelf(bookshelf: @Bookshelf) {
+        let key = bookshelf.genre
+        
+        let oldBookshelf <- self.bookshelfDictionary[key] <- bookshelf
+        destroy oldBookshelf
+    }
+
+    pub fun getRidOfThisGenre(key: String): @Bookshelf {
+        let bookshelf <- self.bookshelfDictionary.remove(key: key)
+        return <- bookshelf!
+    }
+
+    pub fun getReference(key: String): &Bookshelf {
+        return &self.bookshelfDictionary[key] as &Bookshelf
+    }
+
+
+    init() {
+        self.bookshelfDictionary <- {
+            "Style": <- create Bookshelf(_genre: "Education"), 
+            "Composition!": <- create Bookshelf(_genre: "Teaching")
+        }
+    }
+}
+
+
+// Script
+
+import LeonsContract from 0x01
+
+pub fun main(): String {
+  let ref = LeonsContract.getReference(key: "Style")
+  return ref.genre
+}
+
+
+
+References allow us to view data without moving resources and risking their security.

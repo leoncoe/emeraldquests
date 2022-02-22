@@ -1,0 +1,49 @@
+pub contract LeonsContract {
+
+    pub var arrayofBooks: @[Book]
+    pub var bookshelfDictionary: @{String: Bookshelf}
+
+    pub resource Book {
+        pub let title: String
+        init() {
+            self.title = "Understanding Media"
+        }
+    }
+
+     pub fun addBook(book: @Book) {
+        self.arrayofBooks.append(<- book)
+    }
+
+    pub fun deleteBook(index: Int): @Book {
+        return <- self.arrayofBooks.remove(at: index)
+    }
+
+
+
+    pub resource Bookshelf {
+        pub let genre: String
+        init() {
+            self.genre = "Education"
+        }
+    }
+
+    pub fun addToBookshelf(bookshelf: @Bookshelf) {
+        let key = bookshelf.genre
+        
+        let oldBookshelf <- self.bookshelfDictionary[key] <- bookshelf
+        destroy oldBookshelf
+    }
+
+    pub fun getRidOfThisGenre(key: String): @Bookshelf {
+        let bookshelf <- self.bookshelfDictionary.remove(key: key)
+        return <- bookshelf!
+    }
+
+
+    init() {
+        self.arrayofBooks <- []
+        self.bookshelfDictionary <- {}
+
+    }
+
+}
