@@ -1,0 +1,96 @@
+Explain what lives inside of an account.
+An account contains contract code as well as the storage of that account.
+
+
+What is the difference between the /storage/, /public/, and /private/ paths?
+
+The storage path can only be accessed by the account owner using AuthAccount in the prepare phase only of a transaction.
+The public path can be read by anyone's scripts, transactions, or contracts and views the storage path.
+The private path can only be accessed by the account owner and whoever they give permission to access and views the storage path.
+
+What does .save() do? What does .load() do? What does .borrow() do?
+save allows you to store something to your account storage, only accessible in the prepare phase of a transaction.
+load allows us to move something out of storage.
+borrow allows you to "look at" whatever you saved in storage, without moving or destroying it.
+
+Explain why we couldn't save something to our account storage inside of a script.
+Scripts only get data, it cannot post.
+
+Explain why I couldn't save something to your account.
+You can only store something in your own account, using AuthAccount. Storage is essentially personal and self-write only. 
+
+Define a contract that returns a resource that has at least 1 field in it. Then, write 2 transactions:
+
+playground: https://play.onflow.org/962f6bda-cea8-44f7-9f18-18cbc3eee5d8
+
+CONTRACT
+pub contract StorageExample {
+
+   pub resource LeonsResource {
+
+    pub var name: String 
+    pub var number: Int 
+
+    init() {
+        self.name = "Leon J"
+        self.number = 27
+    }
+
+   }
+
+   pub fun createResource(): @LeonsResource {
+    return <- create LeonsResource()
+  }
+    
+}
+
+
+TRANSACTION 1
+import StorageExample from 0x01
+
+transaction {
+
+  prepare(signer: AuthAccount) {
+
+  let resourceExample <- StorageExample.createResource()
+  signer.save(<- resourceExample, to: /storage/LeonsResource) 
+
+  let viewResource <- signer.load<@StorageExample.LeonsResource>(from: /storage/LeonsResource)
+                        ?? panic("A `@StorageExample.LeonsResource` resource does not live here.")
+  log(viewResource.number)
+  log(viewResource.name)
+
+
+    destroy viewResource
+
+  
+  }
+
+  execute {
+
+  }
+}
+
+
+TRANSACTION 2
+import StorageExample from 0x01
+
+transaction {
+
+  prepare(signer: AuthAccount) {
+
+  let resourceExample <- StorageExample.createResource()
+  signer.save(<- resourceExample, to: /storage/LeonsResourceViewer) 
+
+  let viewResource = signer.borrow<&StorageExample.LeonsResource>(from: /storage/LeonsResourceViewer)
+                        ?? panic("A `@StorageExample.LeonsResource` resource does not live here.")
+  log(viewResource.number)
+  log(viewResource.name)
+
+  
+  }
+
+  execute {
+
+  }
+}

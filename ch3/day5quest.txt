@@ -1,0 +1,96 @@
+flow playground https://play.onflow.org/f51d7563-cd84-4906-a869-93694100b2ac?type=account&id=264d4724-003c-4807-985d-3e41f45ecd83&storage=none
+
+contract
+
+access(all) contract SomeContract {
+    pub var testStruct: SomeStruct
+
+    pub struct SomeStruct {
+
+        //
+        // 4 Variables
+        //
+
+        pub(set) var a: String
+
+        pub var b: String
+
+        access(contract) var c: String
+
+        access(self) var d: String
+
+        //
+        // 3 Functions
+        //
+
+        pub fun publicFunc() {}
+        // can be called anywhere
+
+        access(contract) fun contractFunc() {}
+        // can only be called within this contract
+
+        access(self) fun privateFunc() {}
+        // can only be called in current & inner scope (this struct)
+
+
+        pub fun structFunc() {
+            /**************/
+            /*** AREA 1 ***/
+            /**************/
+/*** a:(READ & WRITE public) b:(READ & WRITE ) c:(READ & WRITE) d:(read & write) ***/
+
+        }
+
+        init() {
+            self.a = "a"
+            self.b = "b"
+            self.c = "c"
+            self.d = "d"
+        }
+    }
+
+    pub resource SomeResource {
+        pub var e: Int
+
+        pub fun resourceFunc() {
+            /**************/
+            /*** AREA 2 ***/
+            /**************/
+            /*** a:(READ & WRITE public) b:(read, no write) c:(READ, no write) d:(no access) ***/
+
+        }
+
+        init() {
+            self.e = 17
+        }
+    }
+
+    pub fun createSomeResource(): @SomeResource {
+        return <- create SomeResource()
+    }
+
+    pub fun questsAreFun() {
+        /**************/
+        /*** AREA 3 ****/
+        /**************/
+        /*** a:(READ & WRITE public) b:(read, no write) c:(READ, no write) d:(no access) ***/
+
+    }
+
+    init() {
+        self.testStruct = SomeStruct()
+    }
+}
+
+
+
+script
+
+import SomeContract from 0x01
+
+pub fun main() {
+  /**************/
+  /*** AREA 4 ***/
+        /*** a:(READ & WRITE public) b:(read, no write) c:(no access) d:(no access) ***/
+  /**************/
+}
